@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project3/theme.dart';
 import 'package:project3/Listofcars223.dart';
 import 'package:project3/RegistrationDetails4.dart';
-import 'package:project3/theme.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:toast/toast.dart';
 import 'Sendcode7.dart';
 
 class Enter4 extends StatelessWidget {
@@ -16,245 +18,263 @@ class Enter4 extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth fb=FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _mainScaffoldKey,
+      key: _mainScaffoldKey,
       appBar: AppBar(
         title: Text("Login page",style: TextStyle(color: Colors.blue),),
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/back.png'),
-                fit: BoxFit.fill,
-                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-              )
-          ),
-          child:SingleChildScrollView(
-            padding: EdgeInsets.only(top: 30.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                    margin: const EdgeInsets.only(top: 10.0),
-                    child: new Image(
-                        width: 60.0,
-                        height: 60.0,
-                        fit: BoxFit.fill,
-                        image: new AssetImage(
-                            'assets/images/icon.png'))),
-                Container(
-                  margin: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    'Washify',overflow: TextOverflow.ellipsis,style: new TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white),
-                  ),
-                ),
-                new GestureDetector(
-                  onTap: (){
-                    Route route = MaterialPageRoute(builder: (context) => Listofcars223());
-                    Navigator.pushReplacement(context, route);
-                  },
-                  child:new Container(
-                    alignment: Alignment.topRight,
-                    margin: const EdgeInsets.only(right: 20,bottom: 20),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6)
-                    ),
-                    child: Text('Skip', textAlign: TextAlign.center, style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: Colors.white,
-                    ),),
-                  ),
-                ),
-                Stack(
-                  alignment: Alignment.topCenter,
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    Card(
-                      elevation: 2.0,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: Container(
-                        width: 360.00,
-                        height: 480.00,
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 50.0,
-                                  bottom: 20.0,
-                                  left: 25.0,
-                                  right: 25.0),
-                              child: TextField(
-                                focusNode: focusEmail,
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(
-                                      FontAwesomeIcons.mobile,
-                                      color: Colors.black,
-                                      size: 22.0,
-                                    ),
-                                    hintText: "Enter phone number",
-                                    hintStyle: TextStyle(
-                                        fontSize: 18.0)),
-                              ),
-                            ),
-                            Container(
-                              width: 250.0,
-                              height: 1.0,
-                              color: Colors.grey,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 20.0,
-                                  bottom: 20.0,
-                                  left: 25.0,
-                                  right: 25.0),
-                              child: TextField(
-                                focusNode: focusPassword,
-                                controller: passwordController,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(
-                                      FontAwesomeIcons.lock,
-                                      color: Colors.black,
-                                      size: 22.0,
-                                    ),
-                                    hintText: "Enter password",
-                                    hintStyle: TextStyle(
-                                        fontSize: 18.0)),
-                              ),
-                            ),
-                            Container(
-                              width: 250.0,
-                              height: 1.0,
-                              color: Colors.grey,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 60.0, bottom: 26.0),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: AppColours.colorStart,
-                                        offset: Offset(1.0, 6.0),
-                                        blurRadius: 20.0),
-                                    BoxShadow(
-                                        color: AppColours.colorEnd,
-                                        offset: Offset(1.0, 6.0),
-                                        blurRadius: 20.0),
-                                  ],
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        AppColours.colorEnd,
-                                        AppColours.colorStart
-                                      ],
-                                      begin: const FractionalOffset(0.2, 0.2),
-                                      end: const FractionalOffset(1.0, 1.0),
-                                      stops: [0.1, 1.0],
-                                      tileMode: TileMode.clamp)),
-                              child: MaterialButton(
-                                highlightColor: Colors.transparent,
-                                splashColor: AppColours.colorEnd,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 42.0),
-                                  child: Text(
-                                    "Login",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 22.0),
-                                  ),
-                                ),
-                                onPressed: () => displaySnackBar("Login clicked"),
-                              ),
-                            ),
-                            Container(
-                              child: FlatButton(
-                                child: Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: Colors.black,
-                                      fontSize: 18.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Route route = MaterialPageRoute(builder: (context) => Sendcode7());
-                                  Navigator.pushReplacement(context, route);
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: FlatButton(
-                    child: Text(
-                      "Not have account?",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      gradient: LinearGradient(
-                          colors: [Colors.white, Colors.white],
-                          begin: const FractionalOffset(0.2, 0.2),
-                          end: const FractionalOffset(0.5, 0.5),
-                          stops: [0.1, 0.5],
-                          tileMode: TileMode.clamp)),
-                  child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.white70,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "SignUp",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 22.0),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegistrationDetails4()));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/back.png'),
+              fit: BoxFit.fill,
+              colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+            )
         ),
+        child:SingleChildScrollView(
+          padding: EdgeInsets.only(top: 30.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: new Image(
+                      width: 60.0,
+                      height: 60.0,
+                      fit: BoxFit.fill,
+                      image: new AssetImage(
+                          'assets/images/icon.png'))),
+              Container(
+                margin: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  'Washify',overflow: TextOverflow.ellipsis,style: new TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white),
+                ),
+              ),
+              new GestureDetector(
+                onTap: (){
+                  Route route = MaterialPageRoute(builder: (context) => Listofcars223());
+                  Navigator.pushReplacement(context, route);
+                },
+                child:new Container(
+                  alignment: Alignment.topRight,
+                  margin: const EdgeInsets.only(right: 20,bottom: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6)
+                  ),
+                  child: Text('Skip', textAlign: TextAlign.center, style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.white,
+                  ),),
+                ),
+              ),
+              Stack(
+                alignment: Alignment.topCenter,
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  Card(
+                    elevation: 2.0,
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Container(
+                      width: 360.00,
+                      height: 480.00,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 50.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
+                            child: TextField(
+                              focusNode: focusEmail,
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.black),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  icon: Icon(
+                                    FontAwesomeIcons.envelope,
+                                    color: Colors.black,
+                                    size: 22.0,
+                                  ),
+                                  hintText: "Enter email id",
+                                  hintStyle: TextStyle(
+                                      fontSize: 18.0)),
+                            ),
+                          ),
+                          Container(
+                            width: 250.0,
+                            height: 1.0,
+                            color: Colors.grey,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 20.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
+                            child: TextField(
+                              focusNode: focusPassword,
+                              controller: passwordController,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.black),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  icon: Icon(
+                                    FontAwesomeIcons.lock,
+                                    color: Colors.black,
+                                    size: 22.0,
+                                  ),
+                                  hintText: "Enter password",
+                                  hintStyle: TextStyle(
+                                      fontSize: 18.0)),
+                            ),
+                          ),
+                          Container(
+                            width: 250.0,
+                            height: 1.0,
+                            color: Colors.grey,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 60.0, bottom: 26.0),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: AppColours.colorStart,
+                                      offset: Offset(1.0, 6.0),
+                                      blurRadius: 20.0),
+                                  BoxShadow(
+                                      color: AppColours.colorEnd,
+                                      offset: Offset(1.0, 6.0),
+                                      blurRadius: 20.0),
+                                ],
+                                gradient: LinearGradient(
+                                    colors: [
+                                      AppColours.colorEnd,
+                                      AppColours.colorStart
+                                    ],
+                                    begin: const FractionalOffset(0.2, 0.2),
+                                    end: const FractionalOffset(1.0, 1.0),
+                                    stops: [0.1, 1.0],
+                                    tileMode: TileMode.clamp)),
+                            child: MaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: AppColours.colorEnd,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 42.0),
+                                child: Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 22.0),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if(emailController.text.isEmpty && passwordController.text.isEmpty){
+                                  displaySnackBar('Please Enter Your Details');
+                                }
+                                else {
+                                  await fb.signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text).then((
+                                      value) {
+                                    Route route = MaterialPageRoute(
+                                      builder: (context) => Listofcars223(),);
+                                    Navigator.pushReplacement(context, route);
+                                    Toast.show("Login Successfully", context,
+                                        duration: Toast.LENGTH_SHORT,
+                                        gravity: Toast.BOTTOM);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          Container(
+                            child: FlatButton(
+                              child: Text(
+                                "Forgot Password?",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                Route route = MaterialPageRoute(builder: (context) => Sendcode7());
+                                Navigator.pushReplacement(context, route);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: FlatButton(
+                  child: Text(
+                    "Not have account?",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    gradient: LinearGradient(
+                        colors: [Colors.white, Colors.white],
+                        begin: const FractionalOffset(0.2, 0.2),
+                        end: const FractionalOffset(0.5, 0.5),
+                        stops: [0.1, 0.5],
+                        tileMode: TileMode.clamp)),
+                child: MaterialButton(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.white70,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 42.0),
+                    child: Text(
+                      "SignUp",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 22.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationDetails4()));
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ),
     );
   }
   void displaySnackBar(String value) {

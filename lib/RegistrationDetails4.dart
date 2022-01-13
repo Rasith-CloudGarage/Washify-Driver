@@ -3,22 +3,29 @@ import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project3/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'Enter4.dart';
 
 class RegistrationDetails4 extends StatelessWidget {
+  final FocusNode focusFname = FocusNode();
+  final FocusNode focusLname = FocusNode();
   final FocusNode focusEmail = FocusNode();
+  final FocusNode focusPhone = FocusNode();
   final FocusNode focusPassword = FocusNode();
-  final FocusNode focusName = FocusNode();
-  final FocusNode focusConfirmPassword = FocusNode();
+  final FocusNode focusConfirm = FocusNode();
   final GlobalKey<ScaffoldState> _mainScaffoldKey =
   new GlobalKey<ScaffoldState>();
 
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController fnameController = TextEditingController();
+  final TextEditingController lnameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
+  final TextEditingController phoneController =
   TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+  final FirebaseAuth fb=FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,14 +44,14 @@ class RegistrationDetails4 extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/back.png'),
-              fit: BoxFit.fill,
-              colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-            )
+              image: DecorationImage(
+                image: AssetImage('assets/images/back.png'),
+                fit: BoxFit.fill,
+                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+              )
           ),
           child:SingleChildScrollView(
-          padding: EdgeInsets.only(top: 30.0,bottom: 30),
+            padding: EdgeInsets.only(top: 30.0,bottom: 30),
             child: Column(
               children: <Widget>[
                 Container(
@@ -65,7 +72,7 @@ class RegistrationDetails4 extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0)),
                       child: Container(
                         width: 360.00,
-                        height: 800.00,
+                        height: 1000.00,
                         child: Column(
                           children: <Widget>[
                             Container(
@@ -86,9 +93,9 @@ class RegistrationDetails4 extends StatelessWidget {
                               padding: EdgeInsets.only(
                                   top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                               child: TextField(
-                                focusNode: focusName,
-                                controller: nameController,
-                                keyboardType: TextInputType.emailAddress,
+                                focusNode: focusFname,
+                                controller: fnameController,
+                                keyboardType: TextInputType.name,
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Colors.black),
@@ -113,9 +120,9 @@ class RegistrationDetails4 extends StatelessWidget {
                               padding: EdgeInsets.only(
                                   top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                               child: TextField(
-                                focusNode: focusEmail,
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
+                                focusNode: focusLname,
+                                controller: lnameController,
+                                keyboardType: TextInputType.name,
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Colors.black),
@@ -165,11 +172,11 @@ class RegistrationDetails4 extends StatelessWidget {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                                  top: 20.0, left: 25.0, right: 25.0),
                               child: TextField(
-                                focusNode: focusEmail,
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
+                                focusNode: focusPhone,
+                                controller: phoneController,
+                                keyboardType: TextInputType.phone,
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: Colors.black),
@@ -191,15 +198,71 @@ class RegistrationDetails4 extends StatelessWidget {
                               height: 1.0,
                               color: Colors.grey,
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                              child: TextField(
+                                focusNode: focusPassword,
+                                controller: passwordController,
+                                style: TextStyle(
+                                    fontFamily: "SignikaSemiBold",
+                                    fontSize: 16.0,
+                                    color: Colors.black),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    icon: Icon(
+                                      FontAwesomeIcons.lock,
+                                      color: Colors.black,
+                                      size: 22.0,
+                                    ),
+                                    hintText: "Enter password",
+                                    hintStyle: TextStyle(
+                                        fontFamily: "SignikaSemiBold",
+                                        fontSize: 18.0)),
+                              ),
+                            ),
+                            Container(
+                              width: 250.0,
+                              height: 1.0,
+                              color: Colors.grey,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                              child: TextField(
+                                focusNode: focusPassword,
+                                controller: passwordController,
+                                style: TextStyle(
+                                    fontFamily: "SignikaSemiBold",
+                                    fontSize: 16.0,
+                                    color: Colors.black),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    icon: Icon(
+                                      FontAwesomeIcons.lock,
+                                      color: Colors.black,
+                                      size: 22.0,
+                                    ),
+                                    hintText: "Confirm password",
+                                    hintStyle: TextStyle(
+                                        fontFamily: "SignikaSemiBold",
+                                        fontSize: 18.0)),
+                              ),
+                            ),
+                            Container(
+                              width: 250.0,
+                              height: 1.0,
+                              color: Colors.grey,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 20),
+                                  padding: EdgeInsets.only(top:20,bottom: 20),
                                   child: Text('Voter ID',style: new TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 20,left: 100),
+                                  padding: EdgeInsets.only(top:20,bottom: 20,left: 100),
                                   child: Text('Driving License',style: new TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
 
@@ -209,7 +272,7 @@ class RegistrationDetails4 extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 20),
+                                  padding: EdgeInsets.only(top:20,bottom: 20),
                                   child: GestureDetector(
                                     onTap: () => {},
                                     child: Container(
@@ -226,7 +289,7 @@ class RegistrationDetails4 extends StatelessWidget {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 20,left: 100),
+                                  padding: EdgeInsets.only(top:20,bottom: 20,left: 100),
                                   child: GestureDetector(
                                     onTap: () => {},
                                     child: Container(
@@ -282,7 +345,19 @@ class RegistrationDetails4 extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  fb.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value) {
+                                    FirebaseFirestore.instance.collection(currentUser())
+                                        .doc('Washer Details')
+                                        .set({
+                                      "firstName":fnameController.text,
+                                      "lastName":lnameController.text,
+                                      "email":value.user?.email,
+                                      "password":passwordController.text,
+                                      "phone":phoneController.text,
+                                      "fullname":fnameController.text+" "+lnameController.text})
+                                        .then((value) => displaySnackBar("Register Successfull"));
+
+                                  });
                                 },
                               ),
                             )
@@ -297,6 +372,23 @@ class RegistrationDetails4 extends StatelessWidget {
           ),
         )
     );
+  }
+  void displaySnackBar(String value) {
+    _mainScaffoldKey.currentState!.showSnackBar(new SnackBar(
+      content: new Text(
+        value,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.white, fontSize: 16.0, fontFamily: "SignikaRegular"),
+      ),
+      backgroundColor: Colors.blue,
+      duration: Duration(seconds: 3),
+    ));
+  }
+  currentUser() {
+    final User? user = fb.currentUser;
+    final email = user?.email.toString();
+    return email;
   }
 }
 

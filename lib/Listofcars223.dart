@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
@@ -8,10 +9,15 @@ import 'package:project3/Listofcars219.dart';
 import 'package:project3/Listofcars221.dart';
 import 'package:project3/Listofcars222.dart';
 import 'package:project3/Listofcars224.dart';
+import 'package:toast/toast.dart';
 
 import 'Listofcars220.dart';
 
 class Listofcars223 extends StatelessWidget {
+  final FirebaseAuth fb=FirebaseAuth.instance;
+  Future<void> _signOut() async {
+    await fb.signOut();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,8 +258,10 @@ class Listofcars223 extends StatelessWidget {
                                   padding: EdgeInsets.only(top: 10.0,left: 10, right: 5.0),
                                   child: GestureDetector(
                                     onTap: ()  {
+                                      _signOut();
                                       Route route = MaterialPageRoute(builder: (context) => Enter4());
                                       Navigator.pushReplacement(context, route);
+                                      Toast.show("Logout Successfully", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(15.0),

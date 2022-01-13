@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project3/Listofcars227.dart';
+import 'package:project3/Listofcars228.dart';
 
 import 'Listofcars223.dart';
 
@@ -14,6 +16,7 @@ class Listofcars221 extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Reject').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,361 +42,199 @@ class Listofcars221 extends StatelessWidget {
               colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
             )
         ),
-        child:SingleChildScrollView(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topCenter,
-                margin: const EdgeInsets.only(top: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6)
-                ),
-              ),
-              Stack(
-                alignment: Alignment.topCenter,
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Container(
-                      width: 380.00,
-                      height: 580.00,
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
+        child:StreamBuilder<QuerySnapshot>(
+          stream: _usersStream,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                return Card(
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ListTile(
+                          title: Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: (){
+                                  FirebaseFirestore.instance.collection('Reject').doc(document.id).delete();
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 10,left: 20),
+                                  child: Icon(Icons.delete),
                                 ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      data["phone"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20.0,
+                                        bottom: 5.0,
+                                        left: 10.0,
+                                        right: 25.0),
+                                    child: Text(
+                                      data["rs"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      data["name"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 10.0,
+                                        right: 25.0),
+                                    child: Text(
+                                      data["type"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      'Order Placed Date',
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      'Pick up : '+data["pickupDate"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      data["pickupDate"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    child: Text(
+                                      'Delivery : '+data["deliveryDate"],
+                                      style: TextStyle(
+
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: 20.0,
+                                    top: 10.0,
                                     bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.233',
-                                  style: TextStyle(
+                                    left: 20.0,
+                                    right: 20.0),
+                                child: ElevatedButton(
+                                  child: Text('Select'),
+                                  onPressed: () {
+                                    Route route = MaterialPageRoute(builder: (context) => Listofcars228());
+                                    Navigator.pushReplacement(context, route);
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
+                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
                                 ),
                               ),
                             ],
-
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Rasith',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Ironing and Washing',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Order Placed Date',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Pick up : 14/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '16/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Delivery : 16/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0,
-                                bottom: 5.0,
-                                left: 20.0,
-                                right: 20.0),
-                            child: ElevatedButton(
-                              child: Text('Select'),
-                              onPressed: () {
-                                Route route = MaterialPageRoute(builder: (context) => Listofcars227());
-                                Navigator.pushReplacement(context, route);
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
-                                  padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                            ),
-                          ),
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.233',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Rasith',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Ironing and Washing',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Order Placed Date',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Pick up : 14/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '16/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Delivery : 16/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0,
-                                bottom: 5.0,
-                                left: 20.0,
-                                right: 20.0),
-                            child: ElevatedButton(
-                              child: Text('Select'),
-                              onPressed: () {
-                                Route route = MaterialPageRoute(builder: (context) => Listofcars227());
-                                Navigator.pushReplacement(context, route);
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
-                                  padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                            ),
-                          ),
-
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                        ),
+                      ],
+                    )
+                );
+              }).toList(),
+            );
+          },
         ),
 
       ),

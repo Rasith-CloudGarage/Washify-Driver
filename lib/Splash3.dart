@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project3/Enter4.dart';
+import 'package:project3/Listofcars223.dart';
+import 'package:toast/toast.dart';
 
 class Splash3 extends StatefulWidget {
   @override
@@ -11,12 +14,22 @@ class Splash3 extends StatefulWidget {
 }
 
 class _Splash3State extends State<Splash3> {
+  FirebaseAuth fb=FirebaseAuth.instance;
   void initState() {
     super.initState();
     Timer(Duration(seconds: 5),
-            ()=>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Enter4()
-        )
-        )
+            (){
+          final firebaseUser=FirebaseAuth.instance.currentUser;
+          if(firebaseUser!=null) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => Listofcars223(),));
+            Toast.show(
+                "Login Successfully", context, duration: Toast.LENGTH_LONG,
+                gravity: Toast.BOTTOM);
+          }
+          else
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Enter4(),));
+        }
     );
   }
 

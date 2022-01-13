@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
@@ -6,18 +8,34 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project3/Listofcars226.dart';
 import 'package:project3/Listofcars229.dart';
 import 'package:project3/theme.dart';
+import 'package:async/async.dart';
 
 import 'Listofcars223.dart';
 import 'RegistrationDetails4.dart';
 
-class Listofcars219 extends StatelessWidget {
+class Listofcars219 extends StatefulWidget {
+  @override
+  State<Listofcars219> createState() => _Listofcars219State();
+}
+
+class _Listofcars219State extends State<Listofcars219> {
   final FocusNode focusEmail = FocusNode();
+
   final FocusNode focusPassword = FocusNode();
+
   final GlobalKey<ScaffoldState> _mainScaffoldKey =
   new GlobalKey<ScaffoldState>();
 
+  final FirebaseAuth fb=FirebaseAuth.instance;
+
+  bool isVisible=true;
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Order Details').snapshots();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,336 +60,171 @@ class Listofcars219 extends StatelessWidget {
               colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
             )
         ),
-        child:SingleChildScrollView(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topCenter,
-                margin: const EdgeInsets.only(top: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6)
-                ),
-              ),
-              Stack(
-                alignment: Alignment.topCenter,
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Container(
-                      width: 360.00,
-                      height: 580.00,
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.233',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
+        child:StreamBuilder<QuerySnapshot>(
+          stream: _usersStream,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
 
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Rasith',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                return Visibility(
+                  visible: isVisible,
+                    child: Card(
+                        child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ListTile(
+                              title: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 20.0,
+                                                bottom: 5.0,
+                                                left: 20.0,
+                                                right: 20.0),
+                                            child: Text(data["phone"],style: TextStyle(fontSize: 15
+                                                ,fontWeight: FontWeight.normal),)
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 20.0,
+                                                bottom: 5.0,
+                                                left: 10.0,
+                                                right: 25.0),
+                                            child: Text(data["rs"],style: TextStyle(fontSize: 15
+                                                ,fontWeight: FontWeight.normal),)
+                                        ),
+                                      ],
+
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 5.0,
+                                                bottom: 5.0,
+                                                left: 20.0,
+                                                right: 20.0),
+                                            child: Text(data["name"],style: TextStyle(fontSize: 15
+                                                ,fontWeight: FontWeight.normal),)
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 5.0,
+                                                bottom: 5.0,
+                                                left: 10.0,
+                                                right: 25.0),
+                                            child: Text(data["type"],style: TextStyle(fontSize: 15
+                                                ,fontWeight: FontWeight.normal),)
+                                        ),
+                                      ],
+
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            top: 5.0,
+                                            bottom: 5.0,),
+                                          child: Text('Pick Up :'+data["pickupDate"],style: TextStyle(fontSize: 15
+                                              ,fontWeight: FontWeight.normal),),
+
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                              top: 5.0,
+                                              bottom: 5.0,),
+                                            child: Text('Delivery :'+data["deliveryDate"],style: TextStyle(fontSize: 15
+                                                ,fontWeight: FontWeight.normal),)
+
+
+
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 20.0,
+                                                  bottom: 5.0,
+                                                  left: 20.0,
+                                                  right: 20.0),
+                                              child: ElevatedButton(
+                                                child: Text('Accept',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                onPressed: () {
+                                                  Route route = MaterialPageRoute(builder: (context) => Listofcars226());
+                                                  Navigator.pushReplacement(context, route);
+                                                },
+                                                style: ButtonStyle(
+                                                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                                                    padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                                                    textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
+
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 20.0,
+                                                  bottom: 5.0,
+                                                  left: 10.0,
+                                                  right: 25.0),
+                                              child: ElevatedButton(
+                                                child: Text('Reject',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                onPressed: () {
+                                                  FirebaseFirestore.instance.collection('Order Details').doc(document.id).delete();
+                                                  FirebaseFirestore.instance.collection('Reject')
+                                                      .add({"phone":data["phone"],
+                                                    "rs":data["rs"],
+                                                    "name":data["name"],
+                                                    "type":data["type"],
+                                                    "pickupDate":data["pickupDate"],
+                                                    "deliveryDate":data["deliveryDate"]});
+                                                },
+                                                style: ButtonStyle(
+                                                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                                                    padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                                                    textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
+
+                                              ),
+                                            ),
+
+                                          ],
+
+                                        ),
+
+                                        Container(
+                                          width: 350.0,
+                                          height: 1.0,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    ),
+                                  ]
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Ironing and Washing',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Pick up : 14/04/2021',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Delivery : 16/04/2021',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: ElevatedButton(
-                                  child: Text('Accept',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  onPressed: () {
-                                    Route route = MaterialPageRoute(builder: (context) => Listofcars226());
-                                    Navigator.pushReplacement(context, route);
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.green),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: ElevatedButton(
-                                  child: Text('Reject',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                                ),
-                              ),
-
-                            ],
-
-                          ),
-
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.233',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Rasith',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Ironing and Washing',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Pick up : 14/04/2021',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Delivery : 16/04/2021',
-                                  style: TextStyle(
-                                      
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: ElevatedButton(
-                                  child: Text('Accept',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  onPressed: () {
-                                    Route route = MaterialPageRoute(builder: (context) => Listofcars226());
-                                    Navigator.pushReplacement(context, route);
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.green),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: ElevatedButton(
-                                  child: Text('Reject',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
-
-                                ),
-                              ),
-
-                            ],
-
-                          ),
-
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        )
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                );
+              }).toList(),
+            );
+          },
         ),
       ),
     );
   }
+
   void displaySnackBar(String value) {
     _mainScaffoldKey.currentState!.showSnackBar(new SnackBar(
       content: new Text(
@@ -384,6 +237,12 @@ class Listofcars219 extends StatelessWidget {
       duration: Duration(seconds: 3),
     ));
   }
+
+  currentUser() {
+      final User? user = fb.currentUser;
+      final email = user?.email.toString();
+      return email;
+    }
 }
 
 const String _svg_t5t9ev =

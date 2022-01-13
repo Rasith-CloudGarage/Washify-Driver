@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,7 @@ class Listofcars226 extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Order Details').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,512 +39,492 @@ class Listofcars226 extends StatelessWidget {
               colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
             )
         ),
-        child:SingleChildScrollView(
-          padding: EdgeInsets.only(top: 30.0,bottom: 30),
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topCenter,
-                margin: const EdgeInsets.only(top: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6)
-                ),
-                child: Text('8608952178', textAlign: TextAlign.center, style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23,
+        child:StreamBuilder<QuerySnapshot>(
+          stream: _usersStream,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
 
-                  color: Colors.white,
-                ),),
-              ),
-              Stack(
-                alignment: Alignment.topCenter,
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Container(
-                      width: 360.00,
-                      height: 700.00,
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Column(
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                return Card(
+                      child:Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
+                          ListTile(
+                            title: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 20.0,
+                                          bottom: 5.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        data["phone"],
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.233',
-                                  style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 20.0,
+                                          bottom: 5.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        data["rs"],
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Rasith',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Ironing and Washing',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Pick up : 14/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5.0,
-                                  bottom: 5.0,),
-                                child: Text(
-                                  'Delivery : 16/04/2021',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: ElevatedButton(
-                                  child: Text('Accept'),
-                                  onPressed: () {
-                                    Route route = MaterialPageRoute(builder: (context) => Listofcars229());
-                                    Navigator.pushReplacement(context, route);
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.green),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
 
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    bottom: 5.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: ElevatedButton(
-                                  child: Text('Reject'),
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5.0,
+                                          bottom: 5.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        data["name"],
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5.0,
+                                          bottom: 5.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        data["type"],
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
 
                                 ),
-                              ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,),
+                                      child: Text(
+                                        'Pick up : '+data["pickupDate"],
+                                        style: TextStyle(
 
-                            ],
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,),
+                                      child: Text(
+                                        'Delivery : '+data["deliveryDate"],
+                                        style: TextStyle(
 
-                          ),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
 
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '2X   Hat',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 20.0,
+                                          bottom: 5.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: ElevatedButton(
+                                        child: Text('Accept'),
+                                        onPressed: () {
+                                          FirebaseFirestore.instance.collection('Order Details').doc(document.id).delete();
+                                          FirebaseFirestore.instance.collection('Accept')
+                                              .add({"phone":data["phone"],
+                                            "rs":data["rs"],
+                                            "name":data["name"],
+                                            "type":data["type"],
+                                            "pickupDate":data["pickupDate"],
+                                            "deliveryDate":data["deliveryDate"]});
+                                          Route route = MaterialPageRoute(builder: (context) => Listofcars229());
+                                          Navigator.pushReplacement(context, route);
+                                        },
+                                        style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(Colors.green),
+                                            padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                                            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20))),
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                      ),
+                                    ),
+
+                                  ],
+
                                 ),
-                              ),
-                            ],
 
-                          ),
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '3X   T-Shirt',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                Container(
+                                  width: 350.0,
+                                  height: 1.0,
+                                  color: Colors.grey,
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        '2X   Hat',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
-
-                          ),
-
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  '14X   Blouse',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                Container(
+                                  width: 350.0,
+                                  height: 1.0,
+                                  color: Colors.grey,
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        '3X   T-Shirt',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
 
-                          ),
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Delivery',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                Container(
+                                  width: 350.0,
+                                  height: 1.0,
+                                  color: Colors.grey,
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        '14X   Blouse',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'TAX',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                Container(
+                                  width: 350.0,
+                                  height: 1.0,
+                                  color: Colors.grey,
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'Delivery',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'TAX',
+                                        style: TextStyle(
 
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Fee',
-                                  style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'Fee',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'Other Payment',
+                                        style: TextStyle(
 
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Other Payment',
-                                  style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        'Rs.34',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  'Rs.34',
-                                  style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                Container(
+                                  width: 350.0,
+                                  height: 1.0,
+                                  color: Colors.grey,
                                 ),
-                              ),
-                            ],
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'Phone Number :',
+                                        style: TextStyle(
 
-                          ),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        '8608952178',
+                                        style: TextStyle(
 
-                          Container(
-                            width: 350.0,
-                            height: 1.0,
-                            color: Colors.grey,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Phone Number :',
-                                  style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  '8608952178',
-                                  style: TextStyle(
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 20.0,
+                                          right: 20.0),
+                                      child: Text(
+                                        'Address :',
+                                        style: TextStyle(
 
-                                      fontSize: 16.0,
-                                      color: Colors.black),
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 10.0,
+                                          left: 10.0,
+                                          right: 25.0),
+                                      child: Text(
+                                        '10/11a Dayana Nagar',
+                                        style: TextStyle(
+
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                              ),
-                            ],
-
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 20.0,
-                                    right: 20.0),
-                                child: Text(
-                                  'Address :',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                    left: 10.0,
-                                    right: 25.0),
-                                child: Text(
-                                  '10/11a Dayana Nagar',
-                                  style: TextStyle(
-
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-
+                              ],
+                            ),
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                      )
+                  );
+              }).toList(),
+            );
+          },
         ),
-
       ),
     );
   }
