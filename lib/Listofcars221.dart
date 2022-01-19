@@ -16,7 +16,7 @@ class Listofcars221 extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Reject').snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Completed').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +52,10 @@ class Listofcars221 extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+
+            if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No Data',style: TextStyle(fontSize: 20,color: Colors.white),),);
+            }
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
@@ -64,7 +68,7 @@ class Listofcars221 extends StatelessWidget {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: (){
-                                  FirebaseFirestore.instance.collection('Reject').doc(document.id).delete();
+                                  FirebaseFirestore.instance.collection('Completed').doc(document.id).delete();
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 10,left: 20),
@@ -216,7 +220,7 @@ class Listofcars221 extends StatelessWidget {
                                 child: ElevatedButton(
                                   child: Text('Select'),
                                   onPressed: () {
-                                    Route route = MaterialPageRoute(builder: (context) => Listofcars228());
+                                    Route route = MaterialPageRoute(builder: (context) => Listofcars227());
                                     Navigator.pushReplacement(context, route);
                                   },
                                   style: ButtonStyle(

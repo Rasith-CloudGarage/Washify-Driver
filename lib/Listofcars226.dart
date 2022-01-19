@@ -4,6 +4,7 @@ import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project3/Listofcars219.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:toast/toast.dart';
 import 'Listofcars229.dart';
 
 class Listofcars226 extends StatelessWidget {
@@ -48,6 +49,9 @@ class Listofcars226 extends StatelessWidget {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
+            }
+            if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No Data',style: TextStyle(fontSize: 20,color: Colors.white),),);
             }
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -177,8 +181,9 @@ class Listofcars226 extends StatelessWidget {
                                             "type":data["type"],
                                             "pickupDate":data["pickupDate"],
                                             "deliveryDate":data["deliveryDate"]});
-                                          Route route = MaterialPageRoute(builder: (context) => Listofcars229());
-                                          Navigator.pushReplacement(context, route);
+                                          Toast.show("Order Accepted Successfully", context,
+                                              duration: Toast.LENGTH_SHORT,
+                                              gravity: Toast.BOTTOM);
                                         },
                                         style: ButtonStyle(
                                             backgroundColor: MaterialStateProperty.all(Colors.green),

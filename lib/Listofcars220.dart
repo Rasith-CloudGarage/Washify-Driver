@@ -51,6 +51,10 @@ class Listofcars220 extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+
+            if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No Data',style: TextStyle(fontSize: 20,color: Colors.white),),);
+            }
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
@@ -175,8 +179,7 @@ class Listofcars220 extends StatelessWidget {
                                     padding: EdgeInsets.only(top: 10.0, right: 40.0),
                                     child: GestureDetector(
                                       onTap: () {
-                                        Route route = MaterialPageRoute(builder: (context) => Listofcars222());
-                                        Navigator.pushReplacement(context, route);
+
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(15.0),
@@ -229,7 +232,10 @@ class Listofcars220 extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(top: 10.0),
                                     child: GestureDetector(
-                                      onTap: () => {},
+                                      onTap: () {
+                                        Route route = MaterialPageRoute(builder: (context) => Listofcars222());
+                                        Navigator.pushReplacement(context, route);
+                                      },
                                       child: Container(
                                         padding: const EdgeInsets.all(15.0),
                                         decoration: new BoxDecoration(
