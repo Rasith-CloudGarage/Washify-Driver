@@ -50,6 +50,10 @@ class Listofcars224 extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+
+            if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No Data',style: TextStyle(fontSize: 20,color: Colors.white),),);
+            }
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
